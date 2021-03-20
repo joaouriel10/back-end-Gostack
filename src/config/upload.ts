@@ -13,7 +13,7 @@ export default {
     filename(request, file, callback) {
       const filehash = crypto.randomBytes(10).toString('hex');
       const fileName = `${filehash}-${file.originalname}`;
-      
+
       return callback(null, fileName);
     },
   }),

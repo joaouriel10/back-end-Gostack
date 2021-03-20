@@ -2,7 +2,7 @@ import { Router } from 'express';
 
 import ProfileController from '../controllers/ProfileController';
 
-import ensureAuthenticated from "../middleware/ensureAuthenticated";
+import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 
 const profileRouter = Router();
 const profileController = new ProfileController();

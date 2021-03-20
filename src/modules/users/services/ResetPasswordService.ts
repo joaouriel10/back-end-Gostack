@@ -18,34 +18,34 @@ class ResetPasswordService {
     @inject('UsersRepository')
     private usersRepository: IUsersRepository,
 
-    @inject('UserTokenRepository')
+    @inject('UserTokensRepository')
     private userTokensRepository: IUserTokensRepository,
 
-    @inject('BCryptHashProvider')
-    private HashProvider: IHashProvider,
-    ) {}
+    @inject('HashProvider')
+    private hashProvider: IHashProvider,
+  ) {}
 
   public async execute({ token, password }: IRequest): Promise<void> {
     const userToken = await this.userTokensRepository.findByToken(token);
 
     if (!userToken) {
-      throw new AppError('User token does not exist');
+      throw new AppError('User token does not exists');
     }
 
     const user = await this.usersRepository.findById(userToken.user_id);
 
     if (!user) {
-      throw new AppError('User does not exist');
+      throw new AppError('User does not exists');
     }
 
     const tokenCreatedAt = userToken.created_at;
     const compareDate = addHours(tokenCreatedAt, 2);
 
     if (isAfter(Date.now(), compareDate)) {
-      throw new AppError('Token expired.');
+      throw new AppError('Token expired');
     }
 
-    user.password = await this.HashProvider.generateHash(password);
+    user.password = await this.hashProvider.generateHash(password);
 
     await this.usersRepository.save(user);
   }
